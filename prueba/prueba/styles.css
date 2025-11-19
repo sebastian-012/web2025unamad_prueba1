@@ -217,20 +217,24 @@ body {
 /* ---------------------------------------------------- */
 
 .search-container {
-    position: relative; /* necesario para que .suggestions se posicione respecto a este contenedor */
-    width: 250px;       /* ancho del buscador */
-    margin: 50px 0 10px 0; /* margen superior aumentado para moverlo hacia abajo */
-    float: left;        /* lo alinea a la izquierda de la sección info */
+    position: relative;
+    width: 320px;              /* ancho final elegido */
+    margin: 10px 0 10px 0;     /* mantiene el margen que baja el buscador */
+    float: left;               /* mantiene alineación a la izquierda */
 }
 
 .search-container input[type="text"] {
     width: 100%;
-    padding: 10px 15px;
+    padding: 12px 18px;
     font-size: 16px;
     border-radius: 30px;
-    border: 1px solid #ccc;
+    border: 1px solid rgba(0,0,0,0.08);
     outline: none;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
 }
+
+
+
 
 .suggestions {
     position: absolute;
@@ -301,9 +305,8 @@ body {
     gap: 20px;
 }
 
-/* Contenedor de producto único o listado */
+
 .box {
-    display: flex; /* Flex para detalle, grid-item para listado */
     flex-direction: column;
     border-radius: 15px;
     padding: 20px;
@@ -311,7 +314,10 @@ body {
     color: #fff;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     transition: all 0.3s ease;
+    z-index: 1000;
+    display: none;
 }
+
 
 /* Efecto hover para todos */
 .box:hover {
@@ -328,6 +334,7 @@ body {
     margin-bottom: 15px;
     align-self: center;
 }
+
 
 .box div {
     display: flex;
@@ -802,22 +809,12 @@ th, td {
     gap: 20px;
 }
 
-.box {
-    border-top: 2px solid #490606;
-    padding: 20px;
-    border-radius: 15px;
-    z-index: 1000;
-    box-shadow: 0 5px 10px rgba(254, 255, 254, 0.945);
-    display: none;
-}
+
 
 .box:nth-child(-n+4) { 
     display: inline-block;
 }
 
-.box img {
-    width: 120px;
-}
 
 .precio {
     font-size: 15px;
@@ -853,21 +850,6 @@ th, td {
     margin-top: 18px;
 }
 
-.search-container {
-    position: relative;
-    width: 320px; /* ancho ajustado para alinearse visualmente */
-    margin: 0; /* quitar margen superior para alineación */
-}
-
-.search-container input[type="text"] {
-    width: 100%;
-    padding: 12px 18px;
-    font-size: 16px;
-    border-radius: 30px;
-    border: 1px solid rgba(0,0,0,0.08);
-    outline: none;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-}
 
 @media (max-width:991px) {
     .actions { flex-direction: column; align-items: stretch; gap: 12px; }

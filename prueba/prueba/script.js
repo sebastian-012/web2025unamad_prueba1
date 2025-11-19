@@ -206,7 +206,7 @@ function renderCart() {
             <td>S/ ${Number(item.precio).toFixed(2)}</td>
             <td><input class="cart-qty" type="number" min="1" value="${item.cantidad}" data-id="${item.id}"></td>
             <td>S/ ${importe}</td>
-            <td><a href="#" class="borrar" data-id="${item.id}">❌</a></td>
+            <td><a href="#" class="borrar" data-id="${item.id}">X</a></td>
         `;
         lista.appendChild(tr);
     });
