@@ -346,13 +346,6 @@ body {
     font-size: 16px;
 }
 
-.box input {
-    width: 60px;
-    padding: 5px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-}
 
 .box .btn-3 {
     width: fit-content; /* Cambia a 100% para lista */
@@ -1036,4 +1029,70 @@ th, td {
 }
 
 
+/* --- selector de cantidad --- */
 
+/* Contenedor principal con forma redondeada */
+.box .cantidad-control {
+    display: flex !important;
+    flex-direction: row !important; /* Fuerza horizontal */
+    align-items: center;
+    justify-content: space-between;
+    
+    background-color: #5e0015; /* Un tono más oscuro que la tarjeta para profundidad */
+    border-radius: 50px; /* Forma de píldora completa */
+    padding: 4px 6px; /* Espacio interno */
+    margin: 15px 0;
+    width: 120px; /* Ancho fijo para que se vean uniformes */
+    border: 1px solid #7a001d; /* Borde sutil */
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); /* Sombra interna para efecto "hundido" */
+}
+
+/* Botones (+ / -) */
+.cantidad-control button {
+    background-color: transparent; /* Fondo transparente */
+    color: #fff;
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%; /* Botones circulares */
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    line-height: 0;
+    padding-bottom: 3px; /* Ajuste fino visual para centrar el signo */
+}
+
+/* Efecto Hover: Se vuelve blanco con texto rojo */
+.cantidad-control button:hover {
+    background-color: #fff; 
+    color: #7a001d; 
+    transform: scale(1.1); /* Crece un poquito */
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.6); /* Brillo */
+}
+
+/* Input número central */
+.cantidad-control .cantidad {
+    width: 40px;
+    background-color: transparent; /* ¡Adiós al cuadro blanco! */
+    border: none;
+    color: #fff; /* Número en blanco */
+    font-size: 1.2rem;
+    font-weight: 700;
+    text-align: center;
+    outline: none;
+    
+    /* Ocultar flechas navegador */
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+}
+
+/* Fix para Chrome/Safari (ocultar flechas) */
+.cantidad-control .cantidad::-webkit-outer-spin-button,
+.cantidad-control .cantidad::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
