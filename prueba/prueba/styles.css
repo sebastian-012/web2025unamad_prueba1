@@ -737,8 +737,8 @@ th, td {
     width: 450px;
     border-radius: 20px;
     box-shadow: 0px 6px 20px rgba(0,0,0,0.4);
-    margin-left: -50px;
-    align-items: center;
+    display: block;
+    margin: 0 auto;
     animation: fadeIn 1s ease-in;
 }
 
@@ -753,6 +753,7 @@ th, td {
     font-weight: bold;
     transition: .3s ease;
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    margin-top: 25px;
 }
 
 /* Hover del botón */
@@ -781,8 +782,9 @@ th, td {
 
 
 .info-img {
-    width: 50%;
-    text-align: left;
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
 
 
