@@ -30,14 +30,23 @@ body {
 /* ---------------------------------------------------- */
 
 .btnAbrir {
-    display: inline-block;
-    padding: 8px 15px;
-    font-size: 14px;
-    background: #cc007e;
-    border: 1px solid black;
-    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    font-size: 15px;
+    background: linear-gradient(180deg,#720606,#4e0202);
+    color: #fff;
+    border: none;
+    border-radius: 28px;
     cursor: pointer;
-    margin: 40px auto;
+    box-shadow: 0 6px 16px rgba(113,6,6,0.28);
+    transition: transform .12s ease, box-shadow .12s ease;
+}
+
+.btnAbrir:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 22px rgba(113,6,6,0.32);
 }
 
 .contenedor {
@@ -384,35 +393,106 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    padding: 14px 30px; /* espacio superior/inferior y laterales para centrar mejor el logo */
     z-index: 1000;
 }
 
 .logo{
-    font-size: 25px;
-    color: rgb(38, 5, 80);
-    text-transform: uppercase;
-    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
 }
+
+/* Imagen de logo circular */
+.logo-img {
+    width: 88px;
+    height: 88px;
+    object-fit: cover;
+    border-radius: 50%;
+    display: block;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
+
+/* Ajuste fino del contenedor del logo para centrar verticalmente */
+.logo { padding-top: 2px; padding-bottom: 2px; }
 
 /* ---------------------------------------------------- */
 /*                MENÚ DE NAVEGACIÓN (NAVBAR)           */
 /* ---------------------------------------------------- */
 
-.menu .navbar ul li {   
-    position: relative;
-    float: left;
+.nav-list {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    margin: 0;
+    padding: 0;
 }
 
-.menu .navbar ul li a {
-    font-size: 22px;
-    padding: 20px;
-    font-weight: 600;
+.nav-item {
+    list-style: none;
+}
+
+.nav-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 6px;
     color: #1D1D18;
-    display: block;
+    font-weight: 700;
+    font-size: 16px;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    transition: color 0.18s ease, transform 0.18s ease;
 }
 
-.menu .navbar ul li a:hover {
-    color: rgb(117, 7, 7);
+.nav-ico {
+    font-size: 20px;
+    color: #ff6b5e;
+    display: inline-flex;
+    width: 26px;
+    justify-content: center;
+}
+
+.nav-txt {
+    display: inline-block;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    left: 10%;
+    right: 10%;
+    bottom: -8px;
+    height: 3px;
+    background: transparent;
+    border-radius: 6px;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: all 0.25s ease;
+}
+
+.nav-item:hover .nav-link::after,
+.nav-item.active .nav-link::after {
+    background: #ff6b5e;
+    transform: scaleX(1);
+}
+
+.nav-item:hover .nav-link {
+    color: #ff6b5e;
+    transform: translateY(-2px);
+}
+
+@keyframes slideInLeft {
+    from { transform: translateX(-12px); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideInRight {
+    from { transform: translateX(12px); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
 }
 
 #menu {
@@ -451,6 +531,62 @@ body {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
     text-align: center;
 }
+
+/* Cart badge and card styles */
+.cart-wrapper { position: relative; display: inline-block; }
+.cart-count {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    background: #ff9a2e;
+    color: #fff;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Estilo tipo tarjeta para el carrito */
+.cart-card {
+    display: none;
+    position: absolute;
+    right: -10px;
+    top: 48px;
+    width: 720px;
+    max-width: calc(100vw - 40px);
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    text-align: left;
+    color: #222;
+}
+
+.submenu:hover .cart-card { display: block; }
+
+.cart-header {
+    background: #6f0808;
+    color: #fff;
+    padding: 18px 22px;
+}
+.cart-header h3 { margin: 0; font-size: 20px; }
+
+.cart-body { padding: 12px 18px; max-height: 300px; overflow-y: auto; }
+.cart-body table { width: 100%; border-collapse: collapse; }
+.cart-body th, .cart-body td { padding: 10px; text-align: left; vertical-align: middle; font-size: 14px; }
+.cart-body thead th { background: #fff; color: #333; font-weight: 700; border-bottom: 1px solid #eee; }
+.cart-body tbody tr { border-bottom: 1px solid #f0f0f0; }
+.cart-body img { width: 70px; height: 50px; object-fit: cover; border-radius: 6px; }
+
+.cart-footer { padding: 16px 22px 22px 22px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cart-total { font-weight: 800; color: #d35400; font-size: 18px; }
+.vaciar-large { background: #6f0808; color: #fff; padding: 12px 22px; border-radius: 12px; display: inline-block; text-decoration: none; }
+.vaciar-large:hover { background: #8a0b0b; }
+
 
 table {
     width: 100%;
@@ -519,6 +655,24 @@ th, td {
 
 .header-img img {
     width: 500px;
+}
+
+/* Animación sutil tipo "respiración" para la imagen del header */
+.header-img img {
+    transform-origin: center center;
+    will-change: transform;
+    animation: breathe 6s ease-in-out infinite;
+}
+
+.header-img img:hover {
+    animation-play-state: paused; /* pausa la animación al pasar el ratón */
+}
+
+@keyframes breathe {
+    0% { transform: translateY(0) scale(1); }
+    35% { transform: translateY(-6px) scale(1.02); }
+    65% { transform: translateY(4px) scale(0.995); }
+    100% { transform: translateY(0) scale(1); }
 }
 
 
@@ -682,17 +836,48 @@ th, td {
 /* ---------------------------------------------------- */
 
 .btn-1 {
-    display: inline-block;
-    padding: 13px 45px;
-    border-radius: 25px;
-    background-color: #720606;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 28px;
+    border-radius: 28px;
+    background: linear-gradient(180deg,#7a000b,#5a0007);
     font-size: 16px;
     color: #FFFFFF;
-    text-transform: capitalize;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    text-transform: none;
+    box-shadow: 0 8px 22px rgba(0,0,0,0.18);
 }
 
-.btn-1:hover { background-color: #EF8700; }
+.btn-1:hover { background: linear-gradient(180deg,#8a0b0b,#6b0404); transform: translateY(-3px); }
+
+/* Contenedor que alinea el botón Información y el buscador */
+.actions {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    margin-top: 18px;
+}
+
+.search-container {
+    position: relative;
+    width: 320px; /* ancho ajustado para alinearse visualmente */
+    margin: 0; /* quitar margen superior para alineación */
+}
+
+.search-container input[type="text"] {
+    width: 100%;
+    padding: 12px 18px;
+    font-size: 16px;
+    border-radius: 30px;
+    border: 1px solid rgba(0,0,0,0.08);
+    outline: none;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+@media (max-width:991px) {
+    .actions { flex-direction: column; align-items: stretch; gap: 12px; }
+    .search-container { width: 100%; }
+}
 
 .btn-2 {
     background-color: #720606;
@@ -781,13 +966,6 @@ th, td {
 
 #carrito {
     display: none;
-    position: absolute;
-    top: 60px;                 /* justo debajo del icono */
-    right: 0;
-    background: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-    z-index: 1000;
 }
 
 #img-carrito {
@@ -816,7 +994,9 @@ th, td {
     .menu { padding: 20px; }
     .menu label { display: initial; }
     .menu .navbar { position: absolute; top: 100%; left: 0; right: 0; background-color:#FF9000; display: none; }
-    .menu .navbar ul li { width: 100%; }
+    .menu .navbar .nav-list { flex-direction: column; gap: 0; padding: 10px 20px; }
+    .menu .navbar .nav-item { width: 100%; }
+    .menu .navbar .nav-link { width: 100%; justify-content: flex-start; padding: 12px 16px; }
     .logo { display: none; }
     #menu:checked ~ .navbar { display: initial; }
 

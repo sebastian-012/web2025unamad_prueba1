@@ -184,45 +184,105 @@ document.querySelectorAll('.agregar-carrito').forEach(btn => {
 });
 
 // =================== CARRITO ===================
+// Manejo del carrito usando un array serializado en localStorage.
+let cartKey = 'carrito_' + (currentUser && (currentUser.user || currentUser.usuario) ? (currentUser.user || currentUser.usuario) : 'guest');
+let carritoItems = cargarLS(cartKey, []);
+
+function saveCart() {
+    guardarLS(cartKey, carritoItems);
+    renderCart();
+}
+
+function renderCart() {
+    // Rellenar tabla
+    lista.innerHTML = '';
+    carritoItems.forEach(item => {
+        const tr = document.createElement('tr');
+        const importe = (Number(item.precio) * Number(item.cantidad)).toFixed(2);
+        tr.innerHTML = `
+            <td><img src="${item.imagen}" alt=""/></td>
+            <td>${item.titulo}</td>
+            <td>${item.descripcion || ''}</td>
+            <td>S/ ${Number(item.precio).toFixed(2)}</td>
+            <td><input class="cart-qty" type="number" min="1" value="${item.cantidad}" data-id="${item.id}"></td>
+            <td>S/ ${importe}</td>
+            <td><a href="#" class="borrar" data-id="${item.id}">❌</a></td>
+        `;
+        lista.appendChild(tr);
+    });
+    // actualizar total y contador
+    updateCartSummary();
+}
+
+function updateCartSummary() {
+    const countEl = document.getElementById('cart-count');
+    const totalEl = document.getElementById('cart-total');
+    const total = carritoItems.reduce((sum, it) => sum + (Number(it.precio) * Number(it.cantidad)), 0);
+    const count = carritoItems.reduce((c, it) => c + Number(it.cantidad), 0);
+    if (countEl) countEl.textContent = count;
+    if (totalEl) totalEl.textContent = 'S/ ' + total.toFixed(2);
+}
+
 function insertarCarrito(elemento) {
-    const row = document.createElement('tr');
-    row.innerHTML = `
-        <td><img src="${elemento.imagen}" width="100"/></td>
-        <td>${elemento.titulo}</td>
-        <td>${elemento.precio}</td>
-        <td><a href="#" class="borrar" data-id="${elemento.id}">❌</a></td>
-    `;
-    lista.appendChild(row);
-    guardarCarrito();
+    // elemento puede venir con .id (string/number) o ser objeto directo
+    const id = Number(elemento.id);
+    const prod = products.find(p => p.id === id) || {};
+    const price = prod.price || Number(String(elemento.precio || '').replace(/[^0-9\.]/g, '')) || 0;
+    const existente = carritoItems.find(i => Number(i.id) === id);
+    if (existente) {
+        existente.cantidad = Number(existente.cantidad) + 1;
+    } else {
+        carritoItems.push({
+            id: id,
+            imagen: elemento.imagen || prod.image || '',
+            titulo: elemento.titulo || prod.name || 'Producto',
+            descripcion: prod.descripcion || '',
+            precio: price,
+            cantidad: 1
+        });
+    }
+    saveCart();
 }
 
 function eliminarElemento(e) {
     if (e.target.classList.contains('borrar')) {
         e.preventDefault();
-        e.target.closest('tr').remove();
-        guardarCarrito();
+        const id = Number(e.target.dataset.id);
+        carritoItems = carritoItems.filter(i => Number(i.id) !== id);
+        saveCart();
     }
 }
 
-function vaciarCarrito() {
-    while (lista.firstChild) lista.removeChild(lista.firstChild);
-    guardarCarrito();
+function handleQtyChange(e) {
+    if (e.target.classList.contains('cart-qty')) {
+        const id = Number(e.target.dataset.id);
+        const val = Number(e.target.value) || 1;
+        const item = carritoItems.find(i => Number(i.id) === id);
+        if (item) {
+            item.cantidad = val;
+            saveCart();
+        }
+    }
 }
 
-function guardarCarrito() {
-    if (currentUser) localStorage.setItem('carrito_' + currentUser.user, lista.innerHTML);
+function vaciarCarrito(e) {
+    e && e.preventDefault();
+    carritoItems = [];
+    saveCart();
 }
 
 function cargarCarrito() {
-    if (currentUser && localStorage.getItem('carrito_' + currentUser.user)) {
-        lista.innerHTML = localStorage.getItem('carrito_' + currentUser.user);
-    } else lista.innerHTML = '';
+    // recalcular cartKey por si cambió el usuario
+    cartKey = 'carrito_' + (currentUser && (currentUser.user || currentUser.usuario) ? (currentUser.user || currentUser.usuario) : 'guest');
+    carritoItems = cargarLS(cartKey, []);
+    renderCart();
 }
 
 // Eventos carrito
 elementos1.addEventListener('click', comprarElemento);
 detalleProducto.addEventListener('click', comprarDetalle);
-carrito.addEventListener('click', eliminarElemento);
+lista.addEventListener('click', eliminarElemento);
+lista.addEventListener('input', handleQtyChange);
 vaciarCarritoBtn.addEventListener('click', vaciarCarrito);
 
 // =================== PANEL ADMIN ===================

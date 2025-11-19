@@ -14,7 +14,9 @@
         <img class="bg" src="assets/bg.png" alt="">
         <div class="menu container">
 
-            <a href="#" class="logo">Logo</a>
+            <a href="#" class="logo">
+                <img src="assets/LogoPasteleria.PNG" alt="Logo Pastelería" class="logo-img">
+            </a>
 
             <input type="checkbox" id="menu">
             <label for="menu">
@@ -22,11 +24,11 @@
             </label>
 
             <nav class="navbar">
-                <ul>
-                    <li><a href="#">Inicio</a></li>
-                    <li><a href="#">Servicios</a></li>
-                    <li><a href="#">Producto</a></li>
-                    <li><a href="#">Contacto</a></li>
+                <ul class="nav-list">
+                    <li class="nav-item active"><a href="#" class="nav-link"><span class="nav-ico">🏠</span><span class="nav-txt">Inicio</span></a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><span class="nav-ico">🧁</span><span class="nav-txt">Servicios</span></a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><span class="nav-ico">🛍️</span><span class="nav-txt">Producto</span></a></li>
+                    <li class="nav-item"><a href="#" class="nav-link"><span class="nav-ico">📞</span><span class="nav-txt">Contacto</span></a></li>
                 </ul>
             </nav>
 
@@ -42,20 +44,34 @@
             <!-- Carrito -->
             <ul>
                 <li class="submenu">
-                    <img src="assets/car.svg" id="img-carrito" alt="carrito">
-                    <div id="carrito">
-                        <table id="lista-carrito">
-                            <thead>
-                                <tr>
-                                    <th>Imagen</th>
-                                    <th>Nombre</th>
-                                    <th>Precio</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                        <a href="#" id="vaciar-carrito" class="btn-3">vaciar carrito</a>
+                    <div class="cart-wrapper">
+                        <img src="assets/car.svg" id="img-carrito" alt="carrito">
+                        <span id="cart-count" class="cart-count">0</span>
+                    </div>
+                    <div id="carrito" class="cart-card">
+                        <div class="cart-header">
+                            <h3>Mi Carrito</h3>
+                        </div>
+                        <div class="cart-body">
+                            <table id="lista-carrito">
+                                <thead>
+                                    <tr>
+                                        <th>Imagen</th>
+                                        <th>Nombre</th>
+                                        <th>Descripción</th>
+                                        <th>Precio</th>
+                                        <th>Cantidad</th>
+                                        <th>Importe</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                        <div class="cart-footer">
+                            <div class="cart-total">Total: <span id="cart-total">$0.00</span></div>
+                            <a href="#" id="vaciar-carrito" class="btn-3 vaciar-large">Vaciar Carrito</a>
+                        </div>
                     </div>
                 </li>
             </ul>
@@ -73,16 +89,18 @@
                     reprehenderit quas.
                 </p>
 
-                <a href="#" class="btn-1">Informacion</a>
+                <div class="actions">
+                    <a href="#" class="btn-1">Informacion</a>
 
-                <!-- Buscador -->
-                <form class="search-container" onsubmit="return false;">
-                    <input type="text" id="search" placeholder="Buscar torta...">
-                    <div id="suggestions" class="suggestions"></div>
-                </form>
+                    <!-- Buscador -->
+                    <form class="search-container" onsubmit="return false;">
+                        <input type="text" id="search" placeholder="Buscar torta...">
+                        <div id="suggestions" class="suggestions"></div>
+                    </form>
+                </div>
 
             </div>
-
+ 
             <div class="header-img">
                 <img src="assets/pl-1.png" alt="">
             </div>
