@@ -405,3 +405,23 @@ if (currentUser && currentUser.rol === 'Administrador') {
     adminPanel.style.display = 'block';
     cargarUsuarios();
 } else adminPanel.style.display = 'none';
+
+// =================== SLIDER AUTOMÁTICO ===================
+const slides = document.querySelectorAll('.slide');
+let currentSlide = 0;
+
+function nextSlide() {
+    // 1. Quitamos la clase 'active' de la imagen actual
+    slides[currentSlide].classList.remove('active');
+    
+    // 2. Calculamos el índice de la siguiente (usando módulo % para volver a 0 al final)
+    currentSlide = (currentSlide + 1) % slides.length;
+    
+    // 3. Agregamos la clase 'active' a la nueva imagen
+    slides[currentSlide].classList.add('active');
+}
+
+// Cambiar imagen cada 4000 milisegundos (4 segundos)
+if(slides.length > 0) {
+    setInterval(nextSlide, 4000);
+}
