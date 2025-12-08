@@ -147,16 +147,46 @@ registerForm.addEventListener("submit", (e) => {
 
 // =================== COMPRAR ELEMENTO ===================
 function comprarElemento(e) {
-    e.preventDefault();
-    if (!currentUser) { mostrarLogin(); return; }
+    // 1. Lógica para el botón MÁS (+)
+    if (e.target.classList.contains('sumar-cantidad')) {
+        // Buscamos el input vecino (el número '1' en medio)
+        const input = e.target.parentElement.querySelector('.cantidad');
+        let valor = parseInt(input.value) || 1;
+        if (valor < 10) { // Límite máximo (opcional)
+            input.value = valor + 1;
+        }
+        return; 
+    }
+
+    // 2. Lógica para el botón MENOS (-)
+    if (e.target.classList.contains('restar-cantidad')) {
+        const input = e.target.parentElement.querySelector('.cantidad');
+        let valor = parseInt(input.value) || 1;
+        if (valor > 1) { // Evita que baje de 1
+            input.value = valor - 1;
+        }
+        return;
+    }
+
+    // 3. Lógica para el botón AGREGAR AL CARRITO
     if (e.target.classList.contains('agregar-carrito')) {
+        e.preventDefault();
+        if (!currentUser) { mostrarLogin(); return; }
+
         const elemento = e.target.closest('.box');
+        
+        // CAPTURAMOS EL NÚMERO ACTUAL DEL INPUT
+        const inputCantidad = elemento.querySelector('.cantidad');
+        const cantidadElegida = Number(inputCantidad.value) || 1;
+
         const infoProducto = {
             imagen: elemento.querySelector('img').src,
             titulo: elemento.querySelector('h3').textContent,
             precio: elemento.querySelector('.precio').textContent,
-            id: e.target.dataset.id
+            id: e.target.dataset.id,
+            cantidad: cantidadElegida // ¡Enviamos la cantidad correcta!
         };
+        
         insertarCarrito(infoProducto);
     }
 }
@@ -224,13 +254,18 @@ function updateCartSummary() {
 }
 
 function insertarCarrito(elemento) {
-    // elemento puede venir con .id (string/number) o ser objeto directo
     const id = Number(elemento.id);
     const prod = products.find(p => p.id === id) || {};
     const price = prod.price || Number(String(elemento.precio || '').replace(/[^0-9\.]/g, '')) || 0;
+    
+    // Aquí recibimos la cantidad que viene del botón, o usamos 1 por defecto
+    const cantidadAAgregar = elemento.cantidad || 1; 
+
     const existente = carritoItems.find(i => Number(i.id) === id);
+    
     if (existente) {
-        existente.cantidad = Number(existente.cantidad) + 1;
+        // Sumamos la cantidad real en lugar de solo +1
+        existente.cantidad = Number(existente.cantidad) + cantidadAAgregar;
     } else {
         carritoItems.push({
             id: id,
@@ -238,10 +273,11 @@ function insertarCarrito(elemento) {
             titulo: elemento.titulo || prod.name || 'Producto',
             descripcion: prod.descripcion || '',
             precio: price,
-            cantidad: 1
+            cantidad: cantidadAAgregar // Usamos la cantidad elegida
         });
     }
     saveCart();
+
 }
 
 function eliminarElemento(e) {
