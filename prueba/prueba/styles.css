@@ -412,7 +412,7 @@ body {
     object-fit: cover;
     border-radius: 50%;
     display: block;
-    filter: sepia(100%) hue-rotate(320deg) saturate(90%) brightness(0.8);
+    
     box-shadow: 0 6px 18px rgba(0,0,0,0.18);
 }
 

@@ -116,10 +116,10 @@
             <span class="cerrar" onclick="cerrarForm()">×</span>
             <h2 class="sesion">Iniciar Sesión</h2>
             <form onsubmit="return validarLogin()">
-                <label for="loginUsuario">Usuario o correo *</label>
+                <label for="loginUsuario"></label>
                 <input type="text" id="loginUsuario" placeholder="Ingrese su usuario o correo">
 
-                <label for="loginPass">Contraseña *</label>
+                <label for="loginPass"></label>
                 <div class="passBox">
                     <input type="password" id="loginPass" placeholder="Ingrese su contraseña">
                     <span class="ojo" onclick="verPass('loginPass')">&#128065;</span>
@@ -139,20 +139,20 @@
             <h2>Registro</h2>
             <form onsubmit="return validarRegistro()">
 
-                <label for="regEmail">Correo electrónico *</label>
+                <label for="regEmail"></label>
                 <input type="email" id="regEmail" placeholder="Ingrese su correo">
                 <p id="msgEmail" class="miniError"></p>
 
-                <label for="regUser">Nombre de usuario *</label>
+                <label for="regUser"></label>
                 <input type="text" id="regUser" placeholder="Ingrese su usuario">
 
-                <label for="regPass">Contraseña *</label>
+                <label for="regPass"></label>
                 <div class="passBox">
                     <input type="password" id="regPass" placeholder="Ingrese su contraseña">
                     <span class="ojo" onclick="verPass('regPass')">&#128065;</span>
                 </div>
 
-                <label for="regPass2">Confirmar contraseña *</label>
+                <label for="regPass2"></label>
                 <div class="passBox">
                     <input type="password" id="regPass2" placeholder="Repita su contraseña">
                     <span class="ojo" onclick="verPass('regPass2')">&#128065;</span>
