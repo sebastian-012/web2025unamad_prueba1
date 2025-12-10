@@ -5,6 +5,10 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap');
 
+html {
+    scroll-behavior: smooth;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -22,6 +26,7 @@ body {
     background: #FFF5E1;
     margin: 0;
     padding: 0;
+    padding-top: 100px;
 }
 
 
@@ -385,16 +390,33 @@ body {
     position: relative;
 }
 
+
 .menu {
-    position: absolute;
-    top: 0%;
-    left: 0%;
-    right: 0%;
+    /* 1. POSICIONAMIENTO FIJO */
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2000; /* Siempre encima */
+
+    /* 2. FORZAR ANCHO COMPLETO (Esto anula el efecto del "container") */
+    max-width: none !important; /* Rompe el límite de 1200px */
+    width: 100%;                /* Ocupa toda la pantalla */
+    margin: 0;                  /* Quita el centrado automático */
+    
+    /* 3. ESTILO VISUAL */
+    background-color: #FFF5E1;  /* Tu color crema de fondo */
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1); /* Sombra para resaltar */
+    
+    /* 4. ORGANIZACIÓN DEL CONTENIDO */
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 14px 30px; /* espacio superior/inferior y laterales para centrar mejor el logo */
-    z-index: 1000;
+    
+    /* 5. ESPACIADO INTERNO */
+    /* Como ya no hay container centrando, usamos padding para que el logo
+       y el carrito no se peguen a los bordes de la pantalla */
+    padding: 5px 5%; 
+    transition: all 0.3s ease;
 }
 
 .logo{
@@ -407,8 +429,8 @@ body {
 
 /* Imagen de logo circular */
 .logo-img {
-    width: 120px;
-    height: 120px;
+    width: 90px;
+    height: 90px;
     object-fit: cover;
     border-radius: 50%;
     display: block;
