@@ -4,14 +4,28 @@ function guardarLS(key, value) {
 }
 
 function cargarLS(key, defaultValue) {
-    return JSON.parse(localStorage.getItem(key)) || defaultValue;
+    try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : defaultValue;
+    } catch (e) {
+        return defaultValue;
+    }
 }
 
+
 // =================== USUARIOS INICIALES ===================
-let usuarios = cargarLS('usuarios', [
-    { nombre: 'Administrador', usuario: 'admin', pass: '12345678', rol: 'Administrador', correo: 'admin@gmail.com', ciudad: 'pto.m' },
-    { nombre: 'Cliente', usuario: 'cliente', pass: 'cliente123', rol: 'Cliente', correo: 'cliente@correo.com', ciudad: 'lima' }
-]);
+let usuarios = cargarLS('usuarios', []);
+
+// Crear usuario admin inicial si no existe
+if (!usuarios.some(u => u.rol === 'Admin')) {
+    usuarios.push({
+        usuario: 'admin',
+        email: 'admin@gmail.com',
+        pass: '12345678',
+        rol: 'Admin'
+    });
+    guardarLS('usuarios', usuarios);
+}
 
 // =================== VARIABLES GLOBALES ===================
 const loginFormContainer = document.getElementById("login");
@@ -27,7 +41,6 @@ const regPass2 = document.getElementById("regPass2");
 const errorLogin = document.getElementById("errorLogin");
 const errorRegistro = document.getElementById("errorRegistro");
 const msgEmail = document.getElementById("msgEmail");
-const adminPanel = document.getElementById('admin-panel');
 const detalleProducto = document.getElementById('detalle-producto');
 const carrito = document.getElementById('carrito');
 const lista = document.querySelector('#lista-carrito tbody');
@@ -40,9 +53,10 @@ const userInfo = document.getElementById('user-info');
 const welcomeMsg = document.getElementById('welcome-msg');
 const logoutBtn = document.getElementById('logout-btn');
 const btnAbrir = document.querySelector('.btnAbrir');
+const adminMenu = document.getElementById('admin-menu'); // panel admin opcional
 
-let currentUser = JSON.parse(localStorage.getItem('sesionActiva')) || null;
-let currentItem = 4;
+let currentUser = cargarLS('sesionActiva', null);
+let currentItem = 4; // cuántos productos se muestran inicialmente
 
 // =================== PRODUCTOS ===================
 const products = [
@@ -58,20 +72,19 @@ const products = [
 
 // =================== FUNCIONES MOSTRAR/OCULTAR FORMULARIOS ===================
 function mostrarLogin() {
-    registerFormContainer.style.display = "none";
-    loginFormContainer.style.display = "flex";
+    if (registerFormContainer) registerFormContainer.style.display = "none";
+    if (loginFormContainer) loginFormContainer.style.display = "flex";
 }
 
 function mostrarRegistro() {
-    loginFormContainer.style.display = "none";
-    registerFormContainer.style.display = "flex";
+    if (loginFormContainer) loginFormContainer.style.display = "none";
+    if (registerFormContainer) registerFormContainer.style.display = "flex";
 }
 
 function cerrarForm() {
-    loginFormContainer.style.display = "none";
-    registerFormContainer.style.display = "none";
+    if (loginFormContainer) loginFormContainer.style.display = "none";
+    if (registerFormContainer) registerFormContainer.style.display = "none";
 }
-
 // =================== VER/Ocultar contraseña ===================
 function verPass(id) {
     const campo = document.getElementById(id);
@@ -85,65 +98,76 @@ regEmail.addEventListener("input", () => {
     msgEmail.textContent = regex.test(email) ? "✓ Correo válido" : "Debe terminar en @gmail.com o @hotmail.com";
 });
 
+
 // =================== LOGIN ===================
-loginForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const usuario = loginUsuario.value.trim();
-    const pass = loginPass.value;
-    errorLogin.textContent = "";
-    errorLogin.classList.remove("success", "error");
+if (loginForm) {
+    loginForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const usuario = loginUsuario.value.trim();
+        const pass = loginPass.value;
+        if (errorLogin) { errorLogin.textContent = ""; errorLogin.classList.remove("success", "error"); }
 
-    if (!usuario || !pass) {
-        errorLogin.textContent = "Todos los campos son obligatorios.";
-        errorLogin.classList.add("error");
-        return;
-    }
+        if (!usuario || !pass) {
+            if (errorLogin) { errorLogin.textContent = "Todos los campos son obligatorios."; errorLogin.classList.add("error"); }
+            return;
+        }
 
-    const usuariosLS = JSON.parse(localStorage.getItem("usuarios")) || [];
-    const encontrado = usuariosLS.find(u =>
-        (u.email?.toLowerCase() === usuario.toLowerCase() || u.user?.toLowerCase() === usuario.toLowerCase() || u.usuario?.toLowerCase() === usuario.toLowerCase()) &&
-        u.pass === pass
-    );
+        const usuariosLS = cargarLS("usuarios", []);
+        const encontrado = usuariosLS.find(u =>
+            ((u.email && u.email.toLowerCase() === usuario.toLowerCase()) ||
+            (u.user && u.user.toLowerCase() === usuario.toLowerCase()) ||
+            (u.usuario && u.usuario.toLowerCase() === usuario.toLowerCase())) &&
+            u.pass === pass
+        );
 
-    if (!encontrado) {
-        errorLogin.textContent = "Datos incorrectos.";
-        errorLogin.classList.add("error");
-        return;
-    }
+        if (!encontrado) {
+            if (errorLogin) { errorLogin.textContent = "Datos incorrectos."; errorLogin.classList.add("error"); }
+            return;
+        }
 
-    localStorage.setItem("sesionActiva", JSON.stringify(encontrado));
-    currentUser = encontrado;
+        guardarLS("sesionActiva", encontrado);
+            currentUser = encontrado;
 
-    cerrarForm();
-    mostrarUsuario(encontrado);
-    cargarCarrito();
-});
+            // Si es administrador, redirigir al panel admin
+            if (encontrado.rol === 'Admin') {
+                window.location.href = 'admin.html'; // redirige a admin.html
+                return; // salir para que no siga cargando el carrito
+            }
+
+            // Si es cliente normal, sigue el flujo
+            cerrarForm();
+            mostrarUsuario(encontrado);
+            cargarCarrito();
+
+    });
+}
 
 // =================== REGISTRO ===================
-registerForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const email = regEmail.value.trim();
-    const user = regUser.value.trim();
-    const pass = regPass.value;
-    const pass2 = regPass2.value;
-    errorRegistro.textContent = "";
+if (registerForm) {
+    registerForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const email = regEmail.value.trim();
+        const user = regUser.value.trim();
+        const pass = regPass.value;
+        const pass2 = regPass2.value;
+        if (errorRegistro) errorRegistro.textContent = "";
 
-    const regex = /^[^\s@]+@(gmail\.com|hotmail\.com)$/i;
-    if (!regex.test(email)) { errorRegistro.textContent = "Correo inválido."; return; }
-    if (user.length < 3) { errorRegistro.textContent = "El nombre de usuario debe tener mínimo 3 caracteres."; return; }
-    if (pass.length < 8) { errorRegistro.textContent = "La contraseña debe tener mínimo 8 caracteres."; return; }
-    if (pass !== pass2) { errorRegistro.textContent = "Las contraseñas no coinciden."; return; }
+        const regex = /^[^\s@]+@(gmail\.com|hotmail\.com)$/i;
+        if (!regex.test(email)) { if (errorRegistro) errorRegistro.textContent = "Correo inválido."; return; }
+        if (user.length < 3) { if (errorRegistro) errorRegistro.textContent = "El nombre de usuario debe tener mínimo 3 caracteres."; return; }
+        if (pass.length < 8) { if (errorRegistro) errorRegistro.textContent = "La contraseña debe tener mínimo 8 caracteres."; return; }
+        if (pass !== pass2) { if (errorRegistro) errorRegistro.textContent = "Las contraseñas no coinciden."; return; }
 
-    const usuariosLS = JSON.parse(localStorage.getItem("usuarios")) || [];
-    if (usuariosLS.some(u => u.email === email)) { errorRegistro.textContent = "Este correo ya está registrado."; return; }
+        const usuariosLS = cargarLS("usuarios", []);
+        if (usuariosLS.some(u => u.email === email)) { if (errorRegistro) errorRegistro.textContent = "Este correo ya está registrado."; return; }
 
-    // Unificar propiedades
-    usuariosLS.push({ nombre: user, usuario: user, email, pass, rol: 'Cliente', ciudad: '' });
-    localStorage.setItem("usuarios", JSON.stringify(usuariosLS));
-    alert("Cuenta creada correctamente.");
-    mostrarLogin();
-    registerForm.reset();
-});
+        usuariosLS.push({ nombre: user, usuario: user, user: user, email, pass, rol: 'Cliente' });
+        guardarLS("usuarios", usuariosLS);
+        alert("Cuenta creada correctamente.");
+        mostrarLogin();
+        registerForm.reset();
+    });
+}
 
 // =================== COMPRAR ELEMENTO ===================
 function comprarElemento(e) {
@@ -321,49 +345,7 @@ lista.addEventListener('click', eliminarElemento);
 lista.addEventListener('input', handleQtyChange);
 vaciarCarritoBtn.addEventListener('click', vaciarCarrito);
 
-// =================== PANEL ADMIN ===================
-function cargarUsuarios() {
-    const tbody = document.querySelector('#user-list tbody');
-    tbody.innerHTML = '';
-    usuarios.forEach((u, i) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td>${u.nombre}</td>
-            <td>${u.usuario}</td>
-            <td>${u.rol}</td>
-            <td>${u.correo}</td>
-            <td>${u.ciudad}</td>
-            <td>
-                ${u.usuario !== "admin" ? `<button onclick="editarUsuario(${i})">Editar</button>
-                <button onclick="eliminarUsuario(${i})">Eliminar</button>` : 'Administrador'}
-            </td>
-        `;
-        tbody.appendChild(tr);
-    });
-}
 
-function eliminarUsuario(index) {
-    if (usuarios[index].usuario === "admin") { alert("El usuario administrador no se puede eliminar."); return; }
-    if (confirm('¿Eliminar usuario?')) {
-        usuarios.splice(index, 1);
-        guardarLS('usuarios', usuarios);
-        cargarUsuarios();
-    }
-}
-
-function editarUsuario(index) {
-    const usuario = usuarios[index];
-    const nuevoNombre = prompt("Editar nombre:", usuario.nombre);
-    const nuevoCorreo = prompt("Editar correo:", usuario.correo);
-    const nuevaCiudad = prompt("Editar ciudad:", usuario.ciudad);
-
-    if (nuevoNombre) usuario.nombre = nuevoNombre;
-    if (nuevoCorreo) usuario.correo = nuevoCorreo;
-    if (nuevaCiudad) usuario.ciudad = nuevaCiudad;
-
-    guardarLS('usuarios', usuarios);
-    cargarUsuarios();
-}
 
 // =================== BUSCADOR ===================
 searchInput.addEventListener('input', () => {
@@ -419,45 +401,41 @@ loadMoreBtn.addEventListener('click', () => {
 
 // =================== USUARIO LOGUEADO ===================
 function mostrarUsuario(usuario) {
+    if (!usuario) return;
     welcomeMsg.textContent = `Bienvenido, ${usuario.user || usuario.usuario || usuario.nombre}`;
-    userInfo.style.display = 'flex';
-    btnAbrir.style.display = 'none';
+    if (userInfo) userInfo.style.display = 'flex';
+    if (btnAbrir) btnAbrir.style.display = 'none';
+    if (usuario.rol === 'Admin' && adminMenu) adminMenu.style.display = 'block';
+    if (usuario.rol !== 'Admin' && adminMenu) adminMenu.style.display = 'none';
 }
 
 function cerrarSesion() {
     localStorage.removeItem('sesionActiva');
     userInfo.style.display = 'none';
-    btnAbrir.style.display = 'inline-block';
+    if (btnAbrir) btnAbrir.style.display = 'inline-block';
     currentUser = null;
+    if (adminMenu) adminMenu.style.display = 'none';
     cargarCarrito();
 }
 
-logoutBtn.addEventListener('click', cerrarSesion);
+if (logoutBtn) logoutBtn.addEventListener('click', cerrarSesion);
 
 // =================== INICIALIZAR ===================
-cargarCarrito();
-if (currentUser) mostrarUsuario(currentUser);
-if (currentUser && currentUser.rol === 'Administrador') {
-    adminPanel.style.display = 'block';
-    cargarUsuarios();
-} else adminPanel.style.display = 'none';
+(function init() {
+    if (loginFormContainer) loginFormContainer.style.display = "none";
+    if (registerFormContainer) registerFormContainer.style.display = "none";
+    currentUser = cargarLS('sesionActiva', null);
+    if (currentUser) mostrarUsuario(currentUser);
+    cargarCarrito();
+})();
 
 // =================== SLIDER AUTOMÁTICO ===================
 const slides = document.querySelectorAll('.slide');
 let currentSlide = 0;
-
 function nextSlide() {
-    // 1. Quitamos la clase 'active' de la imagen actual
+    if (slides.length === 0) return;
     slides[currentSlide].classList.remove('active');
-    
-    // 2. Calculamos el índice de la siguiente (usando módulo % para volver a 0 al final)
     currentSlide = (currentSlide + 1) % slides.length;
-    
-    // 3. Agregamos la clase 'active' a la nueva imagen
     slides[currentSlide].classList.add('active');
 }
-
-// Cambiar imagen cada 4000 milisegundos (4 segundos)
-if(slides.length > 0) {
-    setInterval(nextSlide, 4000);
-}
+if (slides.length > 0) setInterval(nextSlide, 4000);
