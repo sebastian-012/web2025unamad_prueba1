@@ -1,72 +1,284 @@
-/* ===== RESET BÁSICO ===== */
+/* Google Font Import - Poppins */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
 body {
-    margin: 0;
-    padding: 20px;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #f4f6f9;
-    color: #333;
+  min-height: 100vh;
+  background: #f5f6fa; /* Fondo gris muy suave */
 }
 
-/* ===== ENCABEZADO ADMIN ===== */
-.admin-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #1e293b;
-    color: white;
-    padding: 15px 20px;
-    border-radius: 6px;
-    margin-bottom: 20px;
+/* --- SIDEBAR --- */
+.sidebar {
+  position: fixed;
+  height: 100%;
+  width: 240px;
+  background: #900C3F; /* Color de tu marca */
+  transition: all 0.5s ease;
 }
 
-/* ===== BOTÓN LOGOUT ===== */
-#logoutAdmin {
-    background-color: #dc2626;
+.sidebar .logo-details {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebar .logo-details i {
+  font-size: 28px;
+  font-weight: 500;
+  color: #fff;
+  min-width: 60px;
+  text-align: center
+}
+
+.sidebar .logo-details .logo_name {
+  color: #fff;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.logout-btn {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 200px;
+    padding: 10px;
+    background: #580826;
     color: white;
     border: none;
-    padding: 8px 14px;
+    border-radius: 8px;
     cursor: pointer;
-    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 16px;
+    transition: 0.3s;
 }
 
-#logoutAdmin:hover {
-    background-color: #b91c1c;
+.logout-btn:hover {
+    background: #EF8700;
 }
 
-/* ===== TÍTULOS ===== */
-h1 {
-    margin: 0;
+/* --- SECCIÓN PRINCIPAL --- */
+.home-section {
+  position: relative;
+  background: #f5f6fa;
+  min-height: 100vh;
+  left: 240px;
+  width: calc(100% - 240px);
+  transition: all 0.5s ease;
 }
 
-h2 {
-    margin-top: 30px;
-    margin-bottom: 10px;
+.home-section nav {
+  display: flex;
+  justify-content: space-between;
+  height: 80px;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0 20px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
 
-/* ===== TABLAS ===== */
-.tabla {
+.sidebar-button {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.sidebar-button i {
+  font-size: 35px;
+  margin-right: 10px;
+}
+
+.profile-details {
+  display: flex;
+  align-items: center;
+  background: #F5F6FA;
+  border: 2px solid #EFEEF1;
+  border-radius: 6px;
+  height: 50px;
+  min-width: 190px;
+  padding: 0 15px 0 2px;
+}
+
+.profile-details img {
+  height: 40px;
+  width: 40px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.profile-details .admin_name {
+  font-size: 15px;
+  font-weight: 500;
+  color: #333;
+  margin: 0 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- TARJETAS (CARDS) --- */
+.home-content {
+  padding: 20px;
+}
+
+.overview-boxes {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  padding: 0 20px;
+  margin-bottom: 26px;
+}
+
+.overview-boxes .box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(100% / 3 - 15px);
+  background: #fff;
+  padding: 15px 14px;
+  border-radius: 12px;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+}
+
+.right-side .box-topic {
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.right-side .number {
+  display: inline-block;
+  font-size: 35px;
+  margin-top: 6px;
+  font-weight: 500;
+}
+
+.right-side .indicator {
+  display: flex;
+  align-items: center;
+}
+
+.right-side .indicator i {
+  height: 20px;
+  width: 20px;
+  background: #8FDACB;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 20px;
+  margin-right: 5px;
+}
+
+.right-side .indicator .text {
+  font-size: 12px;
+}
+
+.overview-boxes .box .cart {
+  display: inline-block;
+  font-size: 32px;
+  height: 50px;
+  width: 50px;
+  background: #cce5ff;
+  line-height: 50px;
+  text-align: center;
+  color: #66b0ff;
+  border-radius: 12px;
+  margin-left: 15px;
+}
+
+.overview-boxes .box .cart.two {
+  color: #2BD47D;
+  background: #C0F2D8;
+}
+
+.overview-boxes .box .cart.three {
+  color: #ffc233;
+  background: #ffe8b3;
+}
+
+/* --- TABLAS --- */
+.sales-boxes {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+}
+
+.sales-boxes .box {
+  min-height: 300px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.recent-sales {
+  width: 55%;
+}
+
+.top-sales {
+  width: 43%;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 20px;
+  color: #900C3F;
+}
+
+.tabla-visual {
     width: 100%;
     border-collapse: collapse;
-    background-color: white;
-    border-radius: 6px;
-    overflow: hidden;
 }
 
-/* ===== CELDAS ===== */
-table th,
-table td {
-    padding: 10px;
+.tabla-visual th {
     text-align: left;
-    border-bottom: 1px solid #e5e7eb;
+    padding: 10px;
+    color: #666;
+    border-bottom: 1px solid #eee;
 }
 
-/* ===== CABECERA DE TABLA ===== */
-table thead {
-    background-color: #2563eb;
-    color: white;
+.tabla-visual td {
+    padding: 10px;
+    border-bottom: 1px solid #f2f2f2;
 }
 
-/* ===== FILAS ===== */
-table tbody tr:hover {
-    background-color: #f1f5f9;
+/* Badges para roles */
+.role-badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.role-admin {
+    background-color: #ffe0e0;
+    color: #d32f2f;
+}
+
+.role-cliente {
+    background-color: #e0f2f1;
+    color: #00897b;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .sidebar { width: 60px; }
+  .sidebar .logo-details span, .logout-btn { display: none; }
+  .sidebar .logo-details i { margin-left: 0; }
+  .home-section { left: 60px; width: calc(100% - 60px); }
+  .overview-boxes .box { width: calc(100% / 2 - 15px); margin-bottom: 15px; }
 }

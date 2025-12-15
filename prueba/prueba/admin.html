@@ -2,40 +2,106 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Panel de Administrador</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Administrador</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="admin.css">
 </head>
 <body>
 
-    <div class="admin-header">
-        <h1>Panel de Administrador</h1>
-        <button id="logoutAdmin">Cerrar sesión</button>
+    <div class="sidebar">
+        <div class="logo-details">
+            <i class='bx bxs-cake'></i>
+            <span class="logo_name">AdminPanel</span>
+        </div>
+        <button id="logoutAdmin" class="logout-btn">
+            <i class='bx bx-log-out'></i> Cerrar Sesión
+        </button>
     </div>
 
-    <h2>Usuarios Registrados</h2>
-    <table class="tabla" id="tablaUsuarios">
-        <thead>
-            <tr>
-                <th>Usuario</th>
-                <th>Email</th>
-                <th>Rol</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <section class="home-section">
+        <nav>
+            <div class="sidebar-button">
+                <i class='bx bx-menu sidebarBtn'></i>
+                <span class="dashboard">Dashboard</span>
+            </div>
+            <div class="profile-details">
+                <img src="assets/LogoPasteleria.PNG" alt="">
+                <span class="admin_name">Administrador</span>
+            </div>
+        </nav>
 
-    <h2>Compras por Usuario</h2>
-    <table class="tabla" id="tablaCompras">
-        <thead>
-            <tr>
-                <th>Usuario</th>
-                <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Precio Total</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+        <div class="home-content">
+            <div class="overview-boxes">
+                <div class="box">
+                    <div class="right-side">
+                        <div class="box-topic">Total Usuarios</div>
+                        <div class="number" id="totalUsers">0</div>
+                        <div class="indicator">
+                            <i class='bx bx-user'></i>
+                            <span class="text">Registrados</span>
+                        </div>
+                    </div>
+                    <i class='bx bx-user cart'></i>
+                </div>
+                <div class="box">
+                    <div class="right-side">
+                        <div class="box-topic">Total Ventas</div>
+                        <div class="number" id="totalSales">0</div>
+                        <div class="indicator">
+                            <i class='bx bx-cart'></i>
+                            <span class="text">Productos vendidos</span>
+                        </div>
+                    </div>
+                    <i class='bx bxs-cart-add cart two'></i>
+                </div>
+                <div class="box">
+                    <div class="right-side">
+                        <div class="box-topic">Ingresos</div>
+                        <div class="number" id="totalIncome">S/ 0.00</div>
+                        <div class="indicator">
+                            <i class='bx bx-money'></i>
+                            <span class="text">Ganancia estimada</span>
+                        </div>
+                    </div>
+                    <i class='bx bx-dollar cart three'></i>
+                </div>
+            </div>
+
+            <div class="sales-boxes">
+                <div class="recent-sales box">
+                    <div class="title">Usuarios Recientes</div>
+                    <div class="sales-details">
+                        <table class="tabla-visual" id="tablaUsuarios">
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="top-sales box">
+                    <div class="title">Registro de Ventas</div>
+                    <table class="tabla-visual" id="tablaCompras">
+                        <thead>
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Producto</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <script src="admin.js"></script>
 </body>
