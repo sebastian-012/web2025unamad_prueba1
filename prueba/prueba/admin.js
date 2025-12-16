@@ -18,58 +18,60 @@ if (!currentUser || currentUser.rol !== 'Admin') {
 // =================== LÓGICA DASHBOARD ===================
 function cargarDashboard() {
     const usuarios = cargarLS('usuarios', []);
+    const historialVentas = cargarLS('historialVentas', []); // <--- LEER HISTORIAL
+    
     const tablaUsuarios = document.querySelector('#tablaUsuarios tbody');
     const tablaCompras = document.querySelector('#tablaCompras tbody');
     
-    // Elementos de Estadísticas (KPIs)
     const totalUsersEl = document.getElementById('totalUsers');
     const totalSalesEl = document.getElementById('totalSales');
     const totalIncomeEl = document.getElementById('totalIncome');
 
-    // Variables acumuladoras
-    let contadorVentas = 0;
-    let totalIngresos = 0;
-
-    // 1. CARGAR USUARIOS
+    // 1. TABLA USUARIOS
     tablaUsuarios.innerHTML = '';
     usuarios.forEach(u => {
-        // Asignar clase de color según el rol
         const badgeClass = u.rol === 'Admin' ? 'role-admin' : 'role-cliente';
-        
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-            <td><div style="font-weight:600">${u.user || u.usuario}</div></td>
-            <td>${u.email}</td>
-            <td><span class="role-badge ${badgeClass}">${u.rol}</span></td>
-        `;
-        tablaUsuarios.appendChild(tr);
-
-        // 2. BUSCAR VENTAS DE ESTE USUARIO
-        const userCartKey = 'carrito_' + (u.user || u.usuario || u.nombre);
-        const carrito = cargarLS(userCartKey, []);
-
-        carrito.forEach(item => {
-            const precioTotal = Number(item.precio) * Number(item.cantidad);
-            
-            // Sumar a estadísticas globales
-            contadorVentas += Number(item.cantidad);
-            totalIngresos += precioTotal;
-
-            // Poner en la tabla de compras
-            const trCompra = document.createElement('tr');
-            trCompra.innerHTML = `
-                <td>${u.user || u.usuario}</td>
-                <td>${item.titulo} <br><small style="color:#888">x${item.cantidad}</small></td>
-                <td style="color:#27ae60; font-weight:bold;">S/ ${precioTotal.toFixed(2)}</td>
-            `;
-            tablaCompras.appendChild(trCompra);
-        });
+        tablaUsuarios.innerHTML += `
+            <tr>
+                <td><div style="font-weight:600">${u.user || u.usuario || u.nombre}</div></td>
+                <td>${u.email}</td>
+                <td><span class="role-badge ${badgeClass}">${u.rol}</span></td>
+            </tr>`;
     });
 
-    // 3. ACTUALIZAR TARJETAS SUPERIORES
+    // 2. TABLA VENTAS (HISTORIAL)
+    tablaCompras.innerHTML = '';
+    let contadorItems = 0;
+    let totalDinero = 0;
+
+    // Recorremos el historial (invertido para ver lo más reciente primero)
+    historialVentas.slice().reverse().forEach(venta => {
+        // Limpiar el texto "S/ " para sumar
+        const monto = parseFloat(venta.total.replace('S/ ', '').replace('Total: ', '')) || 0;
+        totalDinero += monto;
+
+        // Crear resumen de productos
+        let resumen = "";
+        venta.items.forEach(item => {
+            contadorItems += Number(item.cantidad);
+            resumen += `<div>• ${item.titulo} (x${item.cantidad})</div>`;
+        });
+
+        tablaCompras.innerHTML += `
+            <tr>
+                <td>
+                    <strong>${venta.usuario}</strong><br>
+                    <small style="color:#888">${venta.fecha}</small>
+                </td>
+                <td style="font-size:13px">${resumen}</td>
+                <td style="color:#27ae60; font-weight:bold">${venta.total}</td>
+            </tr>`;
+    });
+
+    // 3. ACTUALIZAR TARJETAS
     totalUsersEl.textContent = usuarios.length;
-    totalSalesEl.textContent = contadorVentas;
-    totalIncomeEl.textContent = "S/ " + totalIngresos.toFixed(2);
+    totalSalesEl.textContent = contadorItems;
+    totalIncomeEl.textContent = "S/ " + totalDinero.toFixed(2);
 }
 
 // =================== LOGOUT ===================

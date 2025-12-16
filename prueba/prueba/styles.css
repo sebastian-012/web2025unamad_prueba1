@@ -345,7 +345,9 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    text-align: left;
+    
+    text-align: center;   /* Centra los textos (título, precio, descripción) */
+    align-items: center;  /* Centra la píldora y el botón de agregar */
 }
 
 .box h3 {
@@ -1180,4 +1182,42 @@ th, td {
     text-align: center;     
     margin-right: 10px;     
     margin-bottom: 10px;    
+}
+
+/* botones */
+
+.acciones-carrito {
+    display: flex;
+    gap: 10px;            /* Espacio entre "Vaciar" y "Pagar" */
+    margin-top: 15px;     /* Separación del total */
+    justify-content: flex-end; /* Mueve los botones a la derecha */
+}
+
+/* Botón "Vaciar" (Ajuste para que combine) */
+#vaciar-carrito.btn-3 {
+    margin: 0; /* Quitamos márgenes extra */
+    padding: 12px 18px; /* Tamaño uniforme */
+}
+
+/* Botón "Pagar Ahora" (Estilo verde y moderno) */
+.btn-pagar {
+    background-color: #27ae60; /* Verde */
+    color: white;
+    padding: 12px 24px;
+    border-radius: 12px;
+    text-decoration: none; /* Quita el subrayado de enlace */
+    font-weight: 800;
+    font-size: 15px;
+    box-shadow: 0 4px 10px rgba(39, 174, 96, 0.4); /* Sombra verde suave */
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    display: inline-block; /* Asegura que tome el padding correctamente */
+}
+
+/* Efecto al pasar el mouse por "Pagar Ahora" */
+.btn-pagar:hover {
+    background-color: #2ecc71; /* Verde más claro */
+    transform: translateY(-2px); /* Se mueve un poquito hacia arriba */
+    box-shadow: 0 6px 14px rgba(39, 174, 96, 0.6); /* Sombra más intensa */
 }

@@ -219,19 +219,50 @@ function comprarElemento(e) {
 }
 
 function comprarDetalle(e) {
+    // 1. Lógica para botón SUMAR (+) en el detalle
+    if (e.target.classList.contains('sumar-cantidad')) {
+        const input = e.target.parentElement.querySelector('.cantidad');
+        let valor = parseInt(input.value) || 1;
+        input.value = valor + 1;
+        return;
+    }
+
+    // 2. Lógica para botón RESTAR (-) en el detalle
+    if (e.target.classList.contains('restar-cantidad')) {
+        const input = e.target.parentElement.querySelector('.cantidad');
+        let valor = parseInt(input.value) || 1;
+        if (valor > 1) input.value = valor - 1;
+        return;
+    }
+
+    // 3. Lógica original de agregar al carrito
     e.preventDefault();
-    if (!currentUser) { mostrarLogin(); return; }
     if (e.target.classList.contains('agregar-carrito')) {
+        if (!currentUser) { mostrarLogin(); return; } // Validación de sesión
+
         const box = e.target.closest('.box-detalle');
         if (!box) return;
+
+        // Capturar cantidad del input
+        const inputC = box.querySelector('.cantidad');
+        const qty = Number(inputC.value) || 1;
+
         const productName = box.querySelector('h3').textContent;
         const product = products.find(p => p.name === productName);
+        
         insertarCarrito({
             imagen: product.image,
             titulo: product.name,
             precio: "S/ " + product.price.toFixed(2),
-            id: product.id
+            id: product.id,
+            cantidad: qty // <--- Enviamos la cantidad elegida
         });
+        
+        // Opcional: Cerrar el detalle y limpiar buscador para seguir comprando
+        alert("Producto agregado");
+        const detalleProducto = document.getElementById('detalle-producto');
+        detalleProducto.innerHTML = ''; 
+        document.getElementById('search').value = '';
     }
 }
 
@@ -442,3 +473,49 @@ function nextSlide() {
     slides[currentSlide].classList.add('active');
 }
 if (slides.length > 0) setInterval(nextSlide, 4000);
+
+
+// =================== PROCESAR COMPRA ===================
+const procesarCompraBtn = document.getElementById('procesar-compra');
+
+if (procesarCompraBtn) {
+    procesarCompraBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+
+        if (carritoItems.length === 0) {
+            alert("Tu carrito está vacío.");
+            return;
+        }
+
+        if (!currentUser) {
+            alert("Inicia sesión para comprar.");
+            mostrarLogin();
+            return;
+        }
+
+        const totalTexto = document.getElementById('cart-total').textContent;
+        const confirmacion = confirm(`¿Confirmar compra por ${totalTexto}?`);
+
+        if (confirmacion) {
+            // 1. GUARDAR EN HISTORIAL GLOBAL (Para el Admin)
+            const historial = cargarLS('historialVentas', []);
+            const nuevaVenta = {
+                id: Date.now(),
+                usuario: currentUser.user || currentUser.usuario || currentUser.nombre,
+                email: currentUser.email,
+                fecha: new Date().toLocaleString(),
+                items: carritoItems,
+                total: totalTexto
+            };
+            historial.push(nuevaVenta);
+            guardarLS('historialVentas', historial);
+
+            // 2. VACIAR CARRITO
+            carritoItems = [];
+            saveCart(); // Esto limpia el localStorage del carrito actual
+            renderCart(); // Esto limpia la vista visual
+
+            alert("¡Compra exitosa! Gracias por tu preferencia.");
+        }
+    });
+}
