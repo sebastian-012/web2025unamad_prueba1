@@ -170,22 +170,6 @@ body {
 
 
 
-#logout-btn {
-  background-color: blue;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
-}
-
-#logout-btn:hover {
-  background-color: red;
-}
-
-
 
 /* ---------------------------------------------------- */
 /*                BOTÓN LOGIN Y SUBMENÚ                 */
@@ -1130,6 +1114,7 @@ th, td {
     width: 100%;
     height: 100%;
     object-fit: cover;     /* Recorta la imagen para llenar el cuadro sin deformar */
+    object-position: center 100%;
     opacity: 0;            /* Por defecto invisibles */
     transition: opacity 1.5s ease-in-out; /* Animación lenta y suave */
 }
