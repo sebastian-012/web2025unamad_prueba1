@@ -428,7 +428,7 @@ document.addEventListener('click', e => {
 // =================== CARGAR MÁS PRODUCTOS ===================
 loadMoreBtn.addEventListener('click', () => {
     let boxes = [...document.querySelectorAll('.box-container .box')];
-    for (let i = currentItem; i < currentItem + 4 && i < boxes.length; i++) boxes[i].style.display = 'inline-block';
+    for (let i = currentItem; i < currentItem + 4 && i < boxes.length; i++) boxes[i].style.display = 'flex';
     currentItem += 4;
     if (currentItem >= boxes.length) loadMoreBtn.style.display = 'none';
 });
